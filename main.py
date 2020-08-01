@@ -67,12 +67,9 @@ def get_student(sid):
 	global cur
 
 	cur.execute('''
-	select * from Student;
-	''')
-
-	for s in cur.fetchall():
-		if s[0] == sid:
-			print(s)
+	select * from Student where id = %s;
+	''', (sid, ))
+	print(cur.fetchone())
 
 
 def get_students(course_id):
@@ -80,14 +77,12 @@ def get_students(course_id):
 	global cur
 
 	cur.execute("""
-	select s.id, s.name, c.name, c.id from StudentCourse sc
+	select s.id, s.name, c.name from StudentCourse sc 
 	join Student s on s.id = sc.student_id
 	join Course c on c.id = sc.course_id
-	""")
+	where course_id = %s""", (course_id, ))
 
-	for s in cur.fetchall():
-		if s[3] == course_id:
-			print(s)
+	print(cur.fetchall())
 
 
 def drop_bd():
